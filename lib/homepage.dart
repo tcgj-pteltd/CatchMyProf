@@ -244,15 +244,6 @@ class _HomePageState extends State<HomePage> {
                             )
                           )
                         ),
-                        IconButton(
-                          icon: Icon(Icons.add_box),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ProfDex()),
-                            );
-                          },
-                        )
                       ],
                     ))
                 : Column(
@@ -270,6 +261,9 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
           ),
+          Align(
+
+          )
         ],
       ),
     );
