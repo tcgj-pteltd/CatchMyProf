@@ -38,6 +38,7 @@ dependencies:
   crop: ^0.4.2
   image: ^2.1.19
   dotted_border: ^1.0.7
+  flutter_spinkit: ^4.1.2+1
 
 dev_dependencies:
   flutter_test:

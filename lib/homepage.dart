@@ -14,6 +14,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:catch_my_prof/profdex.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image/image.dart' as Img;
 
 class HomePage extends StatefulWidget {
@@ -187,22 +188,133 @@ class _HomePageState extends State<HomePage> {
     print(counter);
   }
 
-  void showAlertDialog(BuildContext context, String faceId) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("OK"),
+  void showFailDialog(BuildContext context, String input) {
+    Widget okButton = ElevatedButton(
       onPressed: () {
         Navigator.of(context).pop();
-        addProf(faceIdToName(faceId));
-        Player.updateCollections();
-        removeImage();
       },
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+              return Color(0xFF92140C); // Use the component's default.
+            },
+          )
+      ),
+      child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Text("Sure", style: TextStyle(color: Colors.white, fontSize: 20))
+      )
     );
 
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Color(0xFF1E1E24),
+      title: new Container(
+          margin: const EdgeInsets.only(top: 10.0),
+          child: new Row(children: <Widget>[
+            Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    child: Divider(
+                      color: Color(0xFF92140C),
+                      thickness: 4,
+                    ))),
+            Text('FAIL',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5)),
+            Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 10.0),
+                    child: Divider(
+                      color: Color(0xFF92140C),
+                      thickness: 4,
+                    )))
+          ])),
+      content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(input, style: TextStyle(color: Colors.white,
+                fontSize: 20)),
+          ]
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void showAlertDialog(BuildContext context, String faceId) {
+    // set up the button
+    Widget okButton = ElevatedButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+          addProf(faceIdToName(faceId));
+          Player.updateCollections();
+          removeImage();
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                return Color(0xFF92140C); // Use the component's default.
+              },
+            )
+        ),
+        child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text("Sweet!", style: TextStyle(color: Colors.white, fontSize: 20))
+        )
+    );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Wow!"),
-      content: Text('You have caught:' + faceIdToName(faceId)),
+      backgroundColor: Color(0xFF1E1E24),
+      title: new Container(
+          margin: const EdgeInsets.only(top: 10.0),
+          child: new Row(children: <Widget>[
+            Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    child: Divider(
+                      color: Color(0xFF92140C),
+                      thickness: 4,
+                    ))),
+            Text('CAUGHT',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5)),
+            Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 10.0),
+                    child: Divider(
+                      color: Color(0xFF92140C),
+                      thickness: 4,
+                    )))
+          ])),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text("Professor " + faceIdToName(faceId) + "!", style: TextStyle(color: Colors.white,
+          fontSize: 22, fontWeight: FontWeight.bold)),
+          SizedBox(height: 30),
+          Image(
+              image: AssetImage(
+                  'assets/' + faceIdToIndex(faceId) + '.png'),
+              width: 200,
+              height: 200),
+          SizedBox(height: 30),
+          Text("Head to your ProfDex to check it out.", style: TextStyle(color: Colors.white,
+          fontSize: 18)),
+        ]
+      ),
       actions: [
         okButton,
       ],
@@ -237,8 +349,10 @@ class _HomePageState extends State<HomePage> {
 
     if (faceId == "") {
       // No face detected
+
+      showFailDialog(context, "No face detected!");
+
       setState(() {
-        result = "No face detected";
         isLoading = false;
       });
       return;
@@ -247,10 +361,21 @@ class _HomePageState extends State<HomePage> {
     print("Trying face similarity");
     Response faceSimilarity = await findSimilarFaces(faceId);
 
+    if (faceSimilarity == null) {
+      showFailDialog(context, "There is an issue with your connection.");
+
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
+
     if (faceSimilarity.data.length == 0 ||
         faceSimilarity.data[0]['confidence'] < 0.4) {
+
+      showFailDialog(context, "This person does not exist in our database.");
+
       setState(() {
-        result = "No similar faces found";
         isLoading = false;
       });
       return;
@@ -333,6 +458,17 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ))
+                : isLoading
+                ? Column(
+                    children: <Widget>[
+                      Text("Who's that professor?", style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 50),
+                      SpinKitSquareCircle(
+                      color: Colors.white,
+                      size: 100.0
+                      )
+                    ]
+                )
                 : Column(
                     children: <Widget>[
                       (_cropped
@@ -351,20 +487,39 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(height: 50),
                       ElevatedButton(
-                        onPressed: isLoading ? null : submit,
-                        child: Text("Catch!"),
+                        onPressed: submit,
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                return Color(0xFF92140C); // Use the component's default.
+                              },
+                            )
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Text("Identify", textScaleFactor: 2.0, style: GoogleFonts.poiretOne(
+                              textStyle: TextStyle(color: Colors.white), fontSize: 22
+                          ))
+                        )
                       ),
+                      SizedBox(height: 20),
                       TextButton(
-                        onPressed: removeImage,
-                        child: Text("Remove Image"),
+                          onPressed: removeImage,
+                          child: new RichText(
+                              text: new TextSpan(
+                                children: <TextSpan>[
+                                  new TextSpan(text: 'Or ', style: new TextStyle(fontSize: 18)),
+                                  new TextSpan(text: 'Cancel', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
+                                ],
+                              )
+                          )
                       ),
-                      Text(result, style: TextStyle(color: Colors.grey)),
                     ],
                   ),
           ),
         ],
       ),
-      floatingActionButton: Container(
+      floatingActionButton: isLoading ? null : Container(
         height: 90.0,
         width: 90.0,
         child: FloatingActionButton(
