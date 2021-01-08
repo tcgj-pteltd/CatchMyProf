@@ -33,6 +33,7 @@ dependencies:
   loading: ^1.0.2
   flutter_native_image: ^0.0.5
   google_fonts: 1.1.1
+  flutter_native_splash: ^0.2.0+1
   flutter_cube: ^0.0.6
 
 dev_dependencies:
@@ -81,3 +82,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  image: assets/Logo.png
+  color: "1E1E24"
+  android_disable_fullscreen: true
