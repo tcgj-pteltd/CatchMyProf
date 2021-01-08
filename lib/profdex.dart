@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfDex extends StatefulWidget {
   ProfDex({Key key}) : super(key: key);
@@ -9,6 +10,8 @@ class ProfDex extends StatefulWidget {
 }
 
 class _ProfDexState extends State<ProfDex> {
+  static final preferences = SharedPreferences.getInstance();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
