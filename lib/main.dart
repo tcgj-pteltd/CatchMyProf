@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             bottom: TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
+                Tab(icon: Icon(Icons.home)),
                 Tab(icon: Icon(Icons.directions_transit)),
                 Tab(icon: Icon(Icons.directions_bike)),
               ],
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              Icon(Icons.directions_car),
+              HomePage(),
               Icon(Icons.directions_transit),
               Icon(Icons.directions_bike),
             ],
@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  HomePage({Key key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -51,13 +51,11 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -80,11 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
