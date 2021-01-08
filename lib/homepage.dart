@@ -48,36 +48,45 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            _image == null
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: _image == null
                 ? Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: Text('No image selected.'))
+                    child: Column(
+                      children: <Widget>[
+                        RawMaterialButton(
+                          onPressed: getImageFromCamera,
+                          elevation: 2.0,
+                          fillColor: Colors.greenAccent,
+                          child: Text("Snap!", textScaleFactor: 2.0),
+                          padding: EdgeInsets.all(50.0),
+                          shape: CircleBorder(),
+                        ),
+                        TextButton(
+                          onPressed: getImageFromGallery,
+                          child: Text("Or Pick Image"),
+                        ),
+                      ],
+                    ))
                 : Column(
-              children: <Widget>[
-                Image.file(_image, width: 300, height: 300),
-                ElevatedButton(
-                  onPressed: removeImage,
-                  child: Text("Remove Image"),
-                ),
-                ElevatedButton(
-                  onPressed: removeImage,
-                  child: Text("Submit"),
-                )
-              ],
-            ),
-            ElevatedButton(
-              onPressed: getImageFromGallery,
-              child: Text("Pick Image"),
-            ),
-            ElevatedButton(
-              onPressed: getImageFromCamera,
-              child: Text("Use Camera"),
-            )
-          ],
-        ),
+                    children: <Widget>[
+                      Image.file(_image, width: 300, height: 300),
+                      ElevatedButton(
+                        onPressed: removeImage,
+                        child: Text("Submit"),
+                      ),
+                      TextButton(
+                        onPressed: removeImage,
+                        child: Text("Remove Image"),
+                      )
+                    ],
+                  ),
+          )
+        ],
       ),
     );
   }
