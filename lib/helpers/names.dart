@@ -26,13 +26,13 @@ const String BIMLESH_2    = "60123a64-2f1d-4942-9ca4-19b2afb1ab51";
 const String ADI_YOGA_1   = "5d2c6bd4-2024-4ade-8845-07905276f864";
 const String ADI_YOGA_2   = "300bdb0d-8158-417e-9225-43a9d648795b";
 
-const String MARTIN_NAME = 'Martin henz';
+const String MARTIN_NAME = 'Martin Henz';
 const String CRISTINA_NAME = 'Cristina Carbunaru';
 const String WEI_TSANG_NAME = 'Ooi Wei Tsang';
 const String STEVEN_NAME = 'Steven Halim';
 const String AARON_NAME = 'Aaron Tan';
 const String TERENCE_NAME = 'Terence Sim';
-const String DAMITH_NAME = 'Damith Chatura Rajapakse';
+const String DAMITH_NAME = 'Damith Rajapakse';
 const String BIMLESH_NAME = 'Bimlesh Wadhwa';
 const String ADI_NAME = 'Adi Yoga';
 
