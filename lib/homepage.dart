@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:catch_my_prof/profdex.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -228,20 +229,25 @@ class _HomePageState extends State<HomePage> {
                         RawMaterialButton(
                           onPressed: getImageFromCamera,
                           elevation: 2.0,
-                          fillColor: Colors.greenAccent,
-                          child: Text("Snap!", textScaleFactor: 2.0),
-                          padding: EdgeInsets.all(50.0),
+                          fillColor: Color(0xFF92140C),
+                          child: Text("Snap!", textScaleFactor: 2.0, style: GoogleFonts.poiretOne(
+                            textStyle: TextStyle(color: Colors.white), fontSize: 30
+                          )),
+                          padding: EdgeInsets.all(80.0),
                           shape: CircleBorder(),
                         ),
-                        TextButton(
-                          onPressed: getImageFromGallery,
-                          child: new RichText(
-                            text: new TextSpan(
-                              children: <TextSpan>[
-                                new TextSpan(text: 'Or '),
-                                new TextSpan(text: 'Gallery', style: new TextStyle(fontWeight: FontWeight.bold))
-                              ],
-                            )
+                        Container(
+                          margin: EdgeInsets.only(top: 20.0),
+                          child: TextButton(
+                              onPressed: getImageFromGallery,
+                              child: new RichText(
+                                  text: new TextSpan(
+                                    children: <TextSpan>[
+                                      new TextSpan(text: 'Or ', style: new TextStyle(fontSize: 18)),
+                                      new TextSpan(text: 'Gallery', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
+                                    ],
+                                  )
+                              )
                           )
                         ),
                       ],
@@ -261,10 +267,31 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
           ),
-          Align(
-
-          )
         ],
+      ),
+      floatingActionButton: Container(
+        height: 90.0,
+        width: 90.0,
+        child: FloatingActionButton(
+            backgroundColor: Color(0xFF92140C),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfDex())
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                    Icons.portrait_rounded,
+                    size: 36.0
+                ),
+                Text("ProfDex", style: TextStyle(fontSize: 9))
+              ]
+            ),
+        ),
       ),
     );
   }
