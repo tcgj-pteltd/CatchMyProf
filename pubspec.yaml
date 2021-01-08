@@ -84,5 +84,6 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 flutter_native_splash:
-  image:
-  color:
+  image: assets/Logo.png
+  color: "1E1E24"
+  android_disable_fullscreen: true
