@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'helpers/names.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -141,6 +143,34 @@ class _HomePageState extends State<HomePage> {
     return res;
   }
 
+  void showAlertDialog(BuildContext context, String faceId) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Wow!"),
+      content: Text('You have caught:' + faceIdToName(faceId)),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
   void submit() async {
     setState(() {
       isLoading = true;
@@ -180,8 +210,10 @@ class _HomePageState extends State<HomePage> {
     }
 
     setState(() {
-      result = faceSimilarity.data[0]['persistedFaceId'];
+      result = '';
     });
+
+    showAlertDialog(context, faceSimilarity.data[0]['persistedFaceId']);
 
     setState(() {
       isLoading = false;
