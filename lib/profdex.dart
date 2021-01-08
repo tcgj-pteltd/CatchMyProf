@@ -27,7 +27,9 @@ class _ProfDexState extends State<ProfDex> {
     return collected.toString() +
         " out of " +
         total.toString() +
-        " profs collected! (" + (collected / total * 100).toStringAsPrecision(4) + "%)";
+        " profs collected! (" +
+        (collected / total * 100).toStringAsPrecision(3) +
+        "%)";
   }
 
   @override
@@ -64,7 +66,8 @@ class _ProfDexState extends State<ProfDex> {
         child: Column(
           children: <Widget>[
             SizedBox(height: 5),
-            Text(getProfDexStatus(), style: TextStyle(color: Colors.white, fontSize: 20)),
+            Text(getProfDexStatus(),
+                style: TextStyle(color: Colors.white, fontSize: 20)),
             SizedBox(height: 10),
             new Expanded(
               child: GridView.count(
@@ -77,11 +80,17 @@ class _ProfDexState extends State<ProfDex> {
                       margin: const EdgeInsets.all(15.0),
                       padding: const EdgeInsets.all(3.0),
                       child: Column(children: <Widget>[
-                        Image(
-                            image: NetworkImage(
-                                "https://mpng.subpng.com/20180319/yge/kisspng-computer-icons-person-symbol-meridian-energy-group-person-icon-145444-bryan-le-photography-5ab04a4e37af55.3382397515215027982281.jpg"),
-                            width: 100,
-                            height: 100),
+                        profCollections[index] == 0
+                            ? Image(
+                                image: NetworkImage(
+                                    "https://mpng.subpng.com/20180319/yge/kisspng-computer-icons-person-symbol-meridian-energy-group-person-icon-145444-bryan-le-photography-5ab04a4e37af55.3382397515215027982281.jpg"),
+                                width: 100,
+                                height: 100)
+                            : Image(
+                                image: AssetImage(
+                                    'assets/' + index.toString() + '.png'),
+                                width: 100,
+                                height: 100),
                         SizedBox(height: 10),
                         Text(profNames[index] +
                             ": " +
