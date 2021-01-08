@@ -1,13 +1,24 @@
-import "prof.dart";
+import '../helpers/names.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Player {
-  static Set<Prof> professors = new Set<Prof>();
+  static List<int> collections = new List(9);
 
-  static void addProf(Prof professor) {
-    professors.add(professor);
+  static List<int> getCollections() {
+    return collections;
   }
 
-  static List<Prof> getProfessors() {
-    return professors.toList();
+  static void updateCollections() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    for (int i = 0; i < 9; i++) {
+      String profName = PROF_NAMES[i];
+      if (prefs.containsKey(profName)) {
+        collections[i] = prefs.getInt(profName);
+      } else {
+        collections[i] = 0;
+      }
+    }
   }
 }

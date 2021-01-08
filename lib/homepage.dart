@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'helpers/names.dart';
+import 'logic/player.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
@@ -27,6 +28,10 @@ class _HomePageState extends State<HomePage> {
   final picker = ImagePicker();
   bool isLoading = false;
   String result = "";
+
+  static Future<SharedPreferences> getPreferences() {
+    return preferences;
+  }
 
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -163,6 +168,7 @@ class _HomePageState extends State<HomePage> {
       onPressed: () {
         Navigator.of(context).pop();
         addProf(faceIdToName(faceId));
+        Player.updateCollections();
         removeImage();
       },
     );
@@ -325,6 +331,7 @@ class _HomePageState extends State<HomePage> {
         child: FloatingActionButton(
             backgroundColor: Color(0xFF92140C),
             onPressed: () {
+              Player.updateCollections();
               Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ProfDex())

@@ -1,6 +1,8 @@
+import 'helpers/names.dart';
+import 'logic/player.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfDex extends StatefulWidget {
   ProfDex({Key key}) : super(key: key);
@@ -10,7 +12,8 @@ class ProfDex extends StatefulWidget {
 }
 
 class _ProfDexState extends State<ProfDex> {
-  static final preferences = SharedPreferences.getInstance();
+  List<String> profNames = PROF_NAMES;
+  List<int> profCollections = Player.getCollections();
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +60,14 @@ class _ProfDexState extends State<ProfDex> {
                 // horizontal, this would produce 2 rows.
                 crossAxisCount: 2,
                 // Generate 100 Widgets that display their index in the List
-                children: List.generate(10, (index) {
+                children: List.generate(9, (index) {
                   return Container(
-
                       margin: const EdgeInsets.all(15.0),
                       padding: const EdgeInsets.all(3.0),
+                      child: Text(profNames[index] + " : " + profCollections[index].toString()),
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blueAccent)
+                          border: Border.all(color: Colors.blueAccent),
+                          color: Colors.white
                       )
                   );
                 }),

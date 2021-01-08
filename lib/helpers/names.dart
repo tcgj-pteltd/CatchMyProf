@@ -1,3 +1,5 @@
+import 'dart:core';
+
 const String MARTIN_1     = "eaf2a815-8331-4767-824b-3c875a6aff2b";
 const String MARTIN_2     = "480085f1-062f-41f1-8d24-b64a299c0a67";
 
@@ -24,67 +26,81 @@ const String BIMLESH_2    = "60123a64-2f1d-4942-9ca4-19b2afb1ab51";
 const String ADI_YOGA_1   = "5d2c6bd4-2024-4ade-8845-07905276f864";
 const String ADI_YOGA_2   = "300bdb0d-8158-417e-9225-43a9d648795b";
 
+const String MARTIN_NAME = 'Martin henz';
+const String CRISTINA_NAME = 'Cristina Carbunaru';
+const String WEI_TSANG_NAME = 'Ooi Wei Tsang';
+const String STEVEN_NAME = 'Steven Halim';
+const String AARON_NAME = 'Aaron Tan';
+const String TERENCE_NAME = 'Terence Sim';
+const String DAMITH_NAME = 'Damith Chatura Rajapakse';
+const String BIMLESH_NAME = 'Bimlesh Wadhwa';
+const String ADI_NAME = 'Adi Yoga';
+
+const List<String> PROF_NAMES = [ MARTIN_NAME, CRISTINA_NAME, WEI_TSANG_NAME,
+  STEVEN_NAME, AARON_NAME, TERENCE_NAME,
+  DAMITH_NAME, BIMLESH_NAME, ADI_NAME ];
+
 String faceIdToName(String faceId) {
   switch (faceId) {
     case MARTIN_1:
     case MARTIN_2:
       {
-        return "Martin Henz";
+        return MARTIN_NAME;
       }
       break;
 
     case CRIS_1:
     case CRIS_2:
       {
-        return "Cristina Carbunaru";
+        return CRISTINA_NAME;
       }
       break;
 
     case WEI_TSANG_1:
     case WEI_TSANG_2:
       {
-        return "Ooi Wei Tsang";
+        return WEI_TSANG_NAME;
       }
       break;
 
     case HALIM_1:
     case HALIM_2:
       {
-        return "Steven Halim";
+        return STEVEN_NAME;
       }
       break;
 
     case AARON_1:
     case AARON_2:
       {
-        return "Aaron Tan";
+        return AARON_NAME;
       }
       break;
 
     case TERENCE_1:
       {
-        return "Terence Sim";
+        return TERENCE_NAME;
       }
       break;
 
     case DAMITH_1:
     case DAMITH_2:
       {
-        return "Damith Chatura Rajapakse";
+        return DAMITH_NAME;
       }
       break;
 
     case BIMLESH_1:
     case BIMLESH_2:
       {
-        return "Bimlesh Wadhwa";
+        return BIMLESH_NAME;
       }
       break;
 
     case ADI_YOGA_1:
     case ADI_YOGA_2:
       {
-        return "Adi Yoga";
+        return ADI_NAME;
       }
       break;
 
