@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> {
           Center(
             child: _image == null
                 ? Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: <Widget>[
                         RawMaterialButton(
@@ -284,34 +284,6 @@ class _HomePageState extends State<HomePage> {
                                   )
                               )
                           )
-                        ),
-                        TextButton(
-                            onPressed: getImageFromGallery,
-                            child: new RichText(
-                                text: new TextSpan(
-                              children: <TextSpan>[
-                                new TextSpan(text: 'Or '),
-                                new TextSpan(
-                                    text: 'Gallery',
-                                    style: new TextStyle(
-                                        fontWeight: FontWeight.bold))
-                              ],
-                            ))),
-                        Text(
-                          "Please make sure you get the permission of the subject before taking his or her photo!",
-                          style: TextStyle(color: Colors.grey),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 50),
-                        IconButton(
-                          icon: Icon(Icons.add_box),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfDex()),
-                            );
-                          },
                         ),
                       ],
                     ))
