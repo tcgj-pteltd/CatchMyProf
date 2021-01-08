@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'cropper.dart';
 import 'helpers/names.dart';
 import 'logic/player.dart';
 
@@ -13,6 +14,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:catch_my_prof/profdex.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image/image.dart' as Img;
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -23,6 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   File _image;
+  bool _cropped = false;
 
   final picker = ImagePicker();
   bool isLoading = false;
@@ -45,13 +48,22 @@ class _HomePageState extends State<HomePage> {
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      Img.Image img = Img.decodeImage(await _image.readAsBytes());
+      await Navigator.pushNamed(
+        context,
+        Cropper.routeName,
+        arguments: CropArgs(_image, img.width.toDouble(), img.height.toDouble()),
+      );
+      setState(() {
+        _cropped = true;
+      });
+    } else {
+      print('No image selected.');
+    }
+
+    setState(() {});
   }
 
   Future getImageFromGallery() async {
@@ -314,7 +326,20 @@ class _HomePageState extends State<HomePage> {
                     ))
                 : Column(
                     children: <Widget>[
-                      Image.file(_image, width: 300, height: 300),
+                      (_cropped
+                          ? Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 2,
+                                  color: Colors.white,),
+                              ),
+                              child: ClipOval(
+                                child: Image.asset(_image.path, fit: BoxFit.contain, width: 300, height: 300, gaplessPlayback: true)
+                              ),
+                            )
+                          : Image.file(_image, width: 300, height: 300)
+                      ),
                       SizedBox(height: 50),
                       ElevatedButton(
                         onPressed: isLoading ? null : submit,

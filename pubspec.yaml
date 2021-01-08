@@ -35,6 +35,9 @@ dependencies:
   google_fonts: 1.1.1
   flutter_native_splash: ^0.2.0+1
   flutter_cube: ^0.0.6
+  crop: ^0.4.2
+  image: ^2.1.19
+  dotted_border: ^1.0.7
 
 dev_dependencies:
   flutter_test:
