@@ -22,11 +22,6 @@ class TabNavigationItem {
           title: Text("Home"),
         ),
         TabNavigationItem(
-          page: HomePage(),
-          icon: Icon(Icons.shopping_basket),
-          title: Text("Shop"),
-        ),
-        TabNavigationItem(
           page: ProfDex(),
           icon: Icon(Icons.search),
           title: Text("ProfDex"),
