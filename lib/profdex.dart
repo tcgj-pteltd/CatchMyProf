@@ -1,3 +1,5 @@
+import 'package:catch_my_prof/award.dart';
+
 import 'helpers/names.dart';
 import 'logic/player.dart';
 
@@ -86,11 +88,18 @@ class _ProfDexState extends State<ProfDex> {
                                     "https://mpng.subpng.com/20180319/yge/kisspng-computer-icons-person-symbol-meridian-energy-group-person-icon-145444-bryan-le-photography-5ab04a4e37af55.3382397515215027982281.jpg"),
                                 width: 100,
                                 height: 100)
-                            : Image(
+                            : GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Award(url:   'assets/' + index.toString() + '.png'))
+                    );
+                    },
+                  child: Image(
                                 image: AssetImage(
                                     'assets/' + index.toString() + '.png'),
                                 width: 100,
-                                height: 100),
+                                height: 100)),
                         SizedBox(height: 10),
                         Text(profNames[index] +
                             ": " +
