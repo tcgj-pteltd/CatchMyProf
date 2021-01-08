@@ -77,7 +77,7 @@ class _ProfDexState extends State<ProfDex> {
                 // horizontal, this would produce 2 rows.
                 crossAxisCount: 2,
                 // Generate 100 Widgets that display their index in the List
-                children: List.generate(9, (index) {
+                children: List.generate(10, (index) {
                   return Container(
                       margin: const EdgeInsets.all(15.0),
                       padding: const EdgeInsets.all(3.0),
