@@ -15,7 +15,19 @@ class _HomePageState extends State<HomePage> {
   File _image;
   final picker = ImagePicker();
 
-  Future getImage() async {
+  Future getImageFromCamera() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future getImageFromGallery() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
@@ -27,16 +39,45 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void removeImage() {
+    setState(() {
+      _image = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _image == null ? Text('No image selected.') : Image.file(_image),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: getImage,
-        tooltip: 'Pick Image',
-        child: Icon(Icons.add_a_photo),
+        child: Column(
+          children: <Widget>[
+            _image == null
+                ? Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text('No image selected.'))
+                : Column(
+              children: <Widget>[
+                Image.file(_image, width: 300, height: 300),
+                ElevatedButton(
+                  onPressed: removeImage,
+                  child: Text("Remove Image"),
+                ),
+                ElevatedButton(
+                  onPressed: removeImage,
+                  child: Text("Submit"),
+                )
+              ],
+            ),
+            ElevatedButton(
+              onPressed: getImageFromGallery,
+              child: Text("Pick Image"),
+            ),
+            ElevatedButton(
+              onPressed: getImageFromCamera,
+              child: Text("Use Camera"),
+            )
+          ],
+        ),
       ),
     );
   }
