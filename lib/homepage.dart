@@ -3,7 +3,9 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'helpers/names.dart';
+import 'logic/player.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +24,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   File _image;
 
+  static final preferences = SharedPreferences.getInstance();
   final picker = ImagePicker();
   bool isLoading = false;
   String result = "";
+
+  static Future<SharedPreferences> getPreferences() {
+    return preferences;
+  }
 
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -144,12 +151,25 @@ class _HomePageState extends State<HomePage> {
     return res;
   }
 
+  Future<void> addProf(String name) async {
+    final SharedPreferences prefs = await preferences;
+    int counter = prefs.getInt(name);
+    if (counter == null) {
+      counter = 0;
+    }
+    prefs.setInt(name, counter + 1);
+    print(counter);
+  }
+
   void showAlertDialog(BuildContext context, String faceId) {
     // set up the button
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
         Navigator.of(context).pop();
+        addProf(faceIdToName(faceId));
+        Player.updateCollections();
+        removeImage();
       },
     );
 
@@ -311,6 +331,7 @@ class _HomePageState extends State<HomePage> {
         child: FloatingActionButton(
             backgroundColor: Color(0xFF92140C),
             onPressed: () {
+              Player.updateCollections();
               Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ProfDex())
