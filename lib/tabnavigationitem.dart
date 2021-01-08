@@ -1,3 +1,4 @@
+import 'package:catch_my_prof/profdex.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +27,9 @@ class TabNavigationItem {
           title: Text("Shop"),
         ),
         TabNavigationItem(
-          page: HomePage(),
+          page: ProfDex(),
           icon: Icon(Icons.search),
-          title: Text("Search"),
+          title: Text("ProfDex"),
         ),
       ];
 }
