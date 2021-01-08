@@ -10,15 +10,18 @@ class Player {
   }
 
   static void updateCollections() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     for (int i = 0; i < 9; i++) {
       String profName = PROF_NAMES[i];
-      if (prefs.containsKey(profName)) {
-        collections[i] = prefs.getInt(profName);
-      } else {
-        collections[i] = 0;
+      if (sharedPreferences.getInt(profName) == null) {
+        sharedPreferences.setInt(profName, 0);
       }
+
+      print(profName);
+      print(sharedPreferences.getInt(profName));
+
+      collections[i] = sharedPreferences.getInt(profName) ?? 0;
     }
   }
 }

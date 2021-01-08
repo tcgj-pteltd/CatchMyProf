@@ -24,14 +24,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   File _image;
 
-  static final preferences = SharedPreferences.getInstance();
   final picker = ImagePicker();
   bool isLoading = false;
   String result = "";
 
-  static Future<SharedPreferences> getPreferences() {
-    return preferences;
+  var sharedPreferences;
+
+  @override
+  void initState() {
+    super.initState();
+    restore();
   }
+
+  restore() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    Player.updateCollections();
+  }
+
 
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -152,12 +161,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> addProf(String name) async {
-    final SharedPreferences prefs = await preferences;
-    int counter = prefs.getInt(name);
-    if (counter == null) {
-      counter = 0;
-    }
-    prefs.setInt(name, counter + 1);
+    int counter = sharedPreferences.getInt(name) ?? 0;
+    sharedPreferences.setInt(name, counter + 1);
     print(counter);
   }
 
