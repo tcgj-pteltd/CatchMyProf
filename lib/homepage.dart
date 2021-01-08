@@ -56,7 +56,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future compressImage(File _image) async {
-    ImageProperties properties = await FlutterNativeImage.getImageProperties(_image.path);
+    ImageProperties properties =
+        await FlutterNativeImage.getImageProperties(_image.path);
     return await FlutterNativeImage.compressImage(_image.path,
         quality: 90,
         targetWidth: 500,
@@ -89,9 +90,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future detectFace(String url) async {
-    String azureDetectUrl = "https://catchmyprof.cognitiveservices.azure.com/face/v1.0/detect";
+    String azureDetectUrl =
+        "https://catchmyprof.cognitiveservices.azure.com/face/v1.0/detect";
     Dio dio = Dio();
-    dio.options.headers["Ocp-Apim-Subscription-Key"] = "5a130a8a987a46b793a3564016e439b0";
+    dio.options.headers["Ocp-Apim-Subscription-Key"] =
+        "5a130a8a987a46b793a3564016e439b0";
     dio.options.headers["Content-Type"] = "application/json";
 
     var faceId;
@@ -115,9 +118,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future findSimilarFaces(String id) async {
-    String azureSimilarUrl = "https://catchmyprof.cognitiveservices.azure.com//face/v1.0/findsimilars";
+    String azureSimilarUrl =
+        "https://catchmyprof.cognitiveservices.azure.com//face/v1.0/findsimilars";
     Dio dio = Dio();
-    dio.options.headers["Ocp-Apim-Subscription-Key"] = "5a130a8a987a46b793a3564016e439b0";
+    dio.options.headers["Ocp-Apim-Subscription-Key"] =
+        "5a130a8a987a46b793a3564016e439b0";
     dio.options.headers["Content-Type"] = "application/json";
 
     Response res;
@@ -195,7 +200,8 @@ class _HomePageState extends State<HomePage> {
     print("Trying face similarity");
     Response faceSimilarity = await findSimilarFaces(faceId);
 
-    if (faceSimilarity.data.length == 0 || faceSimilarity.data[0]['confidence'] < 0.4) {
+    if (faceSimilarity.data.length == 0 ||
+        faceSimilarity.data[0]['confidence'] < 0.4) {
       setState(() {
         result = "No similar faces found";
         isLoading = false;
@@ -221,30 +227,27 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: new Container(
             margin: const EdgeInsets.only(top: 10.0),
-            child: new Row(
-                children: <Widget>[
-                  Expanded(
-                      child: new Container(
-                          margin: const EdgeInsets.only(right: 20.0),
-                          child: Divider(
-                            color: Color(0xFF92140C),
-                            thickness: 4,
-                          )
-                      )
-                  ),
-                  Text('CATCH MY PROF', style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
-                  Expanded(
-                      child: new Container(
-                          margin: const EdgeInsets.only(left: 20.0),
-                          child: Divider(
-                            color: Color(0xFF92140C),
-                            thickness: 4,
-                          )
-                      )
-                  )
-                ]
-            )
-        ),
+            child: new Row(children: <Widget>[
+              Expanded(
+                  child: new Container(
+                      margin: const EdgeInsets.only(right: 20.0),
+                      child: Divider(
+                        color: Color(0xFF92140C),
+                        thickness: 4,
+                      ))),
+              Text('CATCH MY PROF',
+                  style: TextStyle(
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5)),
+              Expanded(
+                  child: new Container(
+                      margin: const EdgeInsets.only(left: 20.0),
+                      child: Divider(
+                        color: Color(0xFF92140C),
+                        thickness: 4,
+                      )))
+            ])),
         elevation: 0,
       ),
       body: Column(
@@ -266,39 +269,48 @@ class _HomePageState extends State<HomePage> {
                           shape: CircleBorder(),
                         ),
                         TextButton(
-                          onPressed: getImageFromGallery,
-                          child: new RichText(
-                            text: new TextSpan(
+                            onPressed: getImageFromGallery,
+                            child: new RichText(
+                                text: new TextSpan(
                               children: <TextSpan>[
                                 new TextSpan(text: 'Or '),
-                                new TextSpan(text: 'Gallery', style: new TextStyle(fontWeight: FontWeight.bold))
+                                new TextSpan(
+                                    text: 'Gallery',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold))
                               ],
-                            )
-                          )
+                            ))),
+                        Text(
+                          "Please make sure you get the permission of the subject before taking his or her photo!",
+                          style: TextStyle(color: Colors.grey),
+                          textAlign: TextAlign.center,
                         ),
+                        SizedBox(height: 50),
                         IconButton(
                           icon: Icon(Icons.add_box),
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => ProfDex()),
+                              MaterialPageRoute(
+                                  builder: (context) => ProfDex()),
                             );
                           },
-                        )
+                        ),
                       ],
                     ))
                 : Column(
                     children: <Widget>[
                       Image.file(_image, width: 300, height: 300),
+                      SizedBox(height: 50),
                       ElevatedButton(
                         onPressed: isLoading ? null : submit,
-                        child: Text("Submit"),
+                        child: Text("Catch!"),
                       ),
                       TextButton(
                         onPressed: removeImage,
                         child: Text("Remove Image"),
                       ),
-                      Text(result),
+                      Text(result, style: TextStyle(color: Colors.grey)),
                     ],
                   ),
           ),
