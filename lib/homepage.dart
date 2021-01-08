@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:catch_my_prof/profdex.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -77,6 +78,15 @@ class _HomePageState extends State<HomePage> {
                             )
                           )
                         ),
+                        IconButton(
+                          icon: Icon(Icons.add_box),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ProfDex()),
+                            );
+                          },
+                        )
                       ],
                     ))
                 : Column(
@@ -92,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-          )
+          ),
         ],
       ),
     );
