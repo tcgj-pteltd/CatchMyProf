@@ -1,5 +1,6 @@
-import 'package:catch_my_prof/tabspage.dart';
 import 'package:flutter/material.dart';
+
+import 'homepage.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
-      home: TabsPage(),
+      home: HomePage(),
       theme: ThemeData(
         primaryColor: Color(0xFF1E1E24),
         scaffoldBackgroundColor: Color(0xFF1E1E24),
