@@ -69,13 +69,22 @@ class _HomePageState extends State<HomePage> {
   Future getImageFromGallery() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      Img.Image img = Img.decodeImage(await _image.readAsBytes());
+      await Navigator.pushNamed(
+        context,
+        Cropper.routeName,
+        arguments: CropArgs(_image, img.width.toDouble(), img.height.toDouble()),
+      );
+      setState(() {
+        _cropped = true;
+      });
+    } else {
+      print('No image selected.');
+    }
+
+    setState(() {});
   }
 
   void removeImage() {
