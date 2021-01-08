@@ -120,3 +120,75 @@ String faceIdToName(String faceId) {
       break;
   }
 }
+
+String faceIdToIndex(String faceId) {
+  switch (faceId) {
+    case MARTIN_1:
+    case MARTIN_2:
+      {
+        return '0';
+      }
+      break;
+
+    case CRIS_1:
+    case CRIS_2:
+      {
+        return '1';
+      }
+      break;
+
+    case WEI_TSANG_1:
+    case WEI_TSANG_2:
+      {
+        return '2';
+      }
+      break;
+
+    case HALIM_1:
+    case HALIM_2:
+      {
+        return '3';
+      }
+      break;
+
+    case AARON_1:
+    case AARON_2:
+      {
+        return '4';
+      }
+      break;
+
+    case TERENCE_1:
+      {
+        return '5';
+      }
+      break;
+
+    case DAMITH_1:
+    case DAMITH_2:
+      {
+        return '6';
+      }
+      break;
+
+    case BIMLESH_1:
+    case BIMLESH_2:
+      {
+        return '7';
+      }
+      break;
+
+    case ADI_YOGA_1:
+    case ADI_YOGA_2:
+      {
+        return '8';
+      }
+      break;
+
+    default:
+      {
+        return "Sean";
+      }
+      break;
+  }
+}
