@@ -335,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.white,),
                               ),
                               child: ClipOval(
-                                child: Image.asset(_image.path, fit: BoxFit.contain, width: 300, height: 300, gaplessPlayback: true)
+                                child: Image.memory(_image.readAsBytesSync(), fit: BoxFit.contain, width: 300, height: 300, gaplessPlayback: true)
                               ),
                             )
                           : Image.file(_image, width: 300, height: 300)
