@@ -250,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       Image.file(_image, width: 300, height: 300),
                       ElevatedButton(
-                        onPressed: submit,
+                        onPressed: isLoading ? null : submit,
                         child: Text("Submit"),
                       ),
                       TextButton(
