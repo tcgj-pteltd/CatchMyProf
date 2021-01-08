@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: TabsPage(),
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primaryColor: Color(0xFF1E1E24),
+        scaffoldBackgroundColor: Color(0xFF1E1E24),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
     );

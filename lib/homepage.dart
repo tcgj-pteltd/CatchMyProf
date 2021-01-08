@@ -68,7 +68,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                         TextButton(
                           onPressed: getImageFromGallery,
-                          child: Text("Or Pick Image"),
+                          child: new RichText(
+                            text: new TextSpan(
+                              children: <TextSpan>[
+                                new TextSpan(text: 'Or '),
+                                new TextSpan(text: 'Gallery', style: new TextStyle(fontWeight: FontWeight.bold))
+                              ],
+                            )
+                          )
                         ),
                       ],
                     ))
