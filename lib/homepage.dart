@@ -277,12 +277,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void showAlertDialog(BuildContext context, String faceId) {
+  void showAlertDialog(BuildContext context, String name, String id) {
     // set up the button
     Widget okButton = ElevatedButton(
         onPressed: () {
           Navigator.of(context).pop();
-          addProf(faceIdToName(faceId)).then((_) {
+          addProf(name).then((_) {
             Player.updateCollections();
             removeImage();
           });
@@ -295,7 +295,7 @@ class _HomePageState extends State<HomePage> {
         )),
         child: Padding(
             padding: EdgeInsets.all(10.0),
-            child: Text("Sweet!",
+            child: Text('Sweet!',
                 style: TextStyle(color: Colors.white, fontSize: 20))));
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -325,18 +325,18 @@ class _HomePageState extends State<HomePage> {
                     )))
           ])),
       content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Text("Professor " + faceIdToName(faceId) + "!",
+        Text('Professor $name!',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 22,
                 fontWeight: FontWeight.bold)),
         SizedBox(height: 30),
         Image(
-            image: AssetImage('assets/' + faceIdToIndex(faceId) + '.png'),
+            image: AssetImage('assets/$id.png'),
             width: 200,
             height: 200),
         SizedBox(height: 30),
-        Text("Head to your ProfDex to check it out.",
+        Text('Head to your ProfDex to check it out.',
             style: TextStyle(color: Colors.white, fontSize: 18)),
       ]),
       actions: [
@@ -385,7 +385,7 @@ class _HomePageState extends State<HomePage> {
     Response faceSimilarity = await findSimilarFaces(faceId);
 
     if (faceSimilarity == null) {
-      showFailDialog(context, "There is an issue with your connection.");
+      showFailDialog(context, "There was a connection issue, try again.");
 
       setState(() {
         isLoading = false;
@@ -407,7 +407,10 @@ class _HomePageState extends State<HomePage> {
       result = '';
     });
 
-    showAlertDialog(context, faceSimilarity.data[0]['persistedFaceId']);
+    faceId = faceSimilarity.data[0]['persistedFaceId'];
+    String name = faceIdToName(faceId);
+    String id = faceIdToIndex(faceId);
+    showAlertDialog(context, name, id);
 
     setState(() {
       isLoading = false;

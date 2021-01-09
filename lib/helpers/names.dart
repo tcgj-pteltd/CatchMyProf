@@ -115,7 +115,7 @@ String faceIdToName(String faceId) {
 
     default:
       {
-        return "Sean";
+        return null;
       }
       break;
   }
@@ -192,7 +192,7 @@ String faceIdToIndex(String faceId) {
 
     default:
       {
-        return "Sean";
+        return null;
       }
       break;
   }
