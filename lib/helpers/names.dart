@@ -27,6 +27,7 @@ const String ADI_YOGA_1   = "5d2c6bd4-2024-4ade-8845-07905276f864";
 const String ADI_YOGA_2   = "300bdb0d-8158-417e-9225-43a9d648795b";
 
 const String ROBY_1       = "ea37fa4a-0fb5-4157-8a67-10496a4d0c13";
+const String ROBY_2       = "2f5f55d1-3395-4ec4-b089-ca8f4263a2b6";
 
 const String MARTIN_NAME = 'Martin Henz';
 const String CRISTINA_NAME = 'Cristina Carbunaru';
@@ -108,6 +109,7 @@ String faceIdToName(String faceId) {
       break;
 
     case ROBY_1:
+    case ROBY_2:
       {
         return ROBY_NAME;
       }
@@ -186,6 +188,7 @@ String faceIdToIndex(String faceId) {
       break;
 
     case ROBY_1:
+    case ROBY_2:
       {
         return '9';
       }
