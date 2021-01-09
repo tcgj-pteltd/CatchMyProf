@@ -185,6 +185,11 @@ String faceIdToIndex(String faceId) {
       }
       break;
 
+    case ROBY_1:
+      {
+        return '9';
+      }
+
     default:
       {
         return "Sean";
