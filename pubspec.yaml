@@ -40,6 +40,7 @@ dependencies:
   dotted_border: ^1.0.7
   flutter_spinkit: ^4.1.2+1
   sphere: ^0.0.4
+  path_provider: ^1.6.27
 
 dev_dependencies:
   flutter_test:

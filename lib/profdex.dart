@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:catch_my_prof/award.dart';
+import 'package:catch_my_prof/helpers/imgrotator.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'helpers/names.dart';
 import 'logic/player.dart';
@@ -16,6 +20,22 @@ class ProfDex extends StatefulWidget {
 class _ProfDexState extends State<ProfDex> {
   List<String> profNames = PROF_NAMES;
   List<int> profCollections = Player.getCollections();
+  List<String> profPaths;
+
+  @override
+  void initState() {
+    super.initState();
+
+    profPaths = List(profNames.length);
+    for (var i = 0; i < profNames.length; i++) {
+      String escName = profNames[i].replaceAll(RegExp(' +'), '_');
+      getImageDir(escName).then((path) {
+        setState(() {
+          profPaths[i] = path;
+        });
+      });
+    }
+  }
 
   String getProfDexStatus() {
     int total = profNames.length;
@@ -32,6 +52,21 @@ class _ProfDexState extends State<ProfDex> {
         " profs collected! (" +
         (collected / total * 100).toStringAsPrecision(3) +
         "%)";
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<String> getImageDir(String name) async {
+    final path = await _localPath;
+    final imagePath = '$path/$name';
+    if (Directory(imagePath).existsSync()) {
+      return imagePath;
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -82,24 +117,24 @@ class _ProfDexState extends State<ProfDex> {
                       margin: const EdgeInsets.all(15.0),
                       padding: const EdgeInsets.all(3.0),
                       child: Column(children: <Widget>[
-                        profCollections[index] == 0
+                        profCollections[index] == 0 || profPaths[index] == null
                             ? Image(
                                 image: NetworkImage(
                                     "https://mpng.subpng.com/20180319/yge/kisspng-computer-icons-person-symbol-meridian-energy-group-person-icon-145444-bryan-le-photography-5ab04a4e37af55.3382397515215027982281.jpg"),
                                 width: 100,
                                 height: 100)
                             : GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Award(url:   'assets/' + index.toString() + '.png'))
-                    );
-                    },
-                  child: Image(
-                                image: AssetImage(
-                                    'assets/' + index.toString() + '.png'),
-                                width: 100,
-                                height: 100)),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Award(
+                                              url: 'assets/' +
+                                                  index.toString() +
+                                                  '.png')));
+                                },
+                                child: ImageRotator(profPaths[index],
+                                    profCollections[index], 3, 'jpg')),
                         SizedBox(height: 10),
                         Text(profNames[index] +
                             ": " +
