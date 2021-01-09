@@ -40,6 +40,7 @@ dependencies:
   dotted_border: ^1.0.7
   flutter_spinkit: ^4.1.2+1
   sphere: ^0.0.4
+  flutter_launcher_icons: ^0.8.1
   path_provider: ^1.6.27
 
 dev_dependencies:
@@ -93,3 +94,8 @@ flutter_native_splash:
   image: assets/Logo.png
   color: "1E1E24"
   android_disable_fullscreen: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/Icon.png"
