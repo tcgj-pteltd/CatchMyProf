@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:catch_my_prof/award.dart';
 import 'package:catch_my_prof/helpers/imgrotator.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'helpers/names.dart';
 import 'logic/player.dart';
@@ -35,6 +36,80 @@ class _ProfDexState extends State<ProfDex> {
         });
       });
     }
+
+    checkIsFirstVisit();
+  }
+
+  checkIsFirstVisit() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    int visited = sharedPreferences.getInt("profdex");
+
+    if (visited == null) {
+      sharedPreferences.setInt("profdex", 1);
+      showAlertDialog(context);
+    }
+
+  }
+
+  void showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = ElevatedButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                return Color(0xFF92140C); // Use the component's default.
+              },
+            )),
+        child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text("Sweet!",
+                style: TextStyle(color: Colors.white, fontSize: 20))));
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Color(0xFF1E1E24),
+      title: new Container(
+          margin: const EdgeInsets.only(top: 10.0),
+          child: new Row(children: <Widget>[
+            Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    child: Divider(
+                      color: Color(0xFF92140C),
+                      thickness: 4,
+                    ))),
+            Text('TIP',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5)),
+            Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 10.0),
+                    child: Divider(
+                      color: Color(0xFF92140C),
+                      thickness: 4,
+                    )))
+          ])),
+      content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        Text("Tap on each professor to view their models!",
+            style: TextStyle(color: Colors.white, fontSize: 18)),
+      ]),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   String getProfDexStatus() {
