@@ -34,12 +34,14 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = false;
   String result = "";
 
+  String _path;
   var sharedPreferences;
 
   @override
   void initState() {
     super.initState();
     restore();
+    _localPath();
   }
 
   restore() async {
@@ -185,27 +187,19 @@ class _HomePageState extends State<HomePage> {
     return res;
   }
 
-  Future<String> get _localPath async {
+  Future _localPath() async {
     final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
+    _path = directory.path;
   }
 
   Future<File> writeImage(String name, int index) async {
-    final path = await _localPath;
-    Directory('$path/$name').createSync();
-    String newImagePath = '$path/$name/$index.jpg';
+    if (_path == null) {
+      await _localPath();
+    }
+    Directory('$_path/$name').createSync();
+    String newImagePath = '$_path/$name/$index.jpg';
 
     return _image.copySync(newImagePath);
-  }
-
-  Future<String> getImageDir(String name) async {
-    final path = await _localPath;
-    final imagePath = '$path/$name';
-    if (Directory(imagePath).existsSync()) {
-      return imagePath;
-    } else {
-      return null;
-    }
   }
 
   Future<void> addProf(String name) async {
@@ -358,10 +352,10 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
 
-    _image = await compressImage(_image);
+    var compressed = await compressImage(_image);
 
     print("Trying upload");
-    String cloudinaryUrl = await uploadImage(_image);
+    String cloudinaryUrl = await uploadImage(compressed);
 
     // https://res.cloudinary.com/jcjc/image/upload/v1610096814/rwvskc2b1pd6z23ssc9d.jpg - has face
     // https://res.cloudinary.com/jcjc/image/upload/v1610096965/zhmke8z8g7xe9nqapwae.jpg - no face
@@ -410,7 +404,11 @@ class _HomePageState extends State<HomePage> {
     faceId = faceSimilarity.data[0]['persistedFaceId'];
     String name = faceIdToName(faceId);
     String id = faceIdToIndex(faceId);
-    showAlertDialog(context, name, id);
+    if (name == null || id == null) {
+      showFailDialog(context, "This person does not exist in our database.");
+    } else {
+      showAlertDialog(context, name, id);
+    }
 
     setState(() {
       isLoading = false;
@@ -567,7 +565,11 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Player.updateCollections();
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfDex()));
+                      MaterialPageRoute(builder: (context) {
+                        print(_path);
+                        return ProfDex(path: _path);
+                      })
+                  );
                 },
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

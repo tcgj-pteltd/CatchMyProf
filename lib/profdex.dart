@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:catch_my_prof/award.dart';
 import 'package:catch_my_prof/helpers/imgrotator.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'helpers/names.dart';
@@ -12,7 +12,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfDex extends StatefulWidget {
-  ProfDex({Key key}) : super(key: key);
+  String path;
+
+  ProfDex({Key key, this.path}) : super(key: key);
 
   @override
   _ProfDexState createState() => _ProfDexState();
@@ -22,6 +24,7 @@ class _ProfDexState extends State<ProfDex> {
   List<String> profNames = PROF_NAMES;
   List<int> profCollections = Player.getCollections();
   List<String> profPaths;
+  Random rng = Random.secure();
 
   @override
   void initState() {
@@ -30,10 +33,9 @@ class _ProfDexState extends State<ProfDex> {
     profPaths = List(profNames.length);
     for (var i = 0; i < profNames.length; i++) {
       String escName = profNames[i].replaceAll(RegExp(' +'), '_');
-      getImageDir(escName).then((path) {
-        setState(() {
-          profPaths[i] = path;
-        });
+      String imgPath = getImageDir(escName);
+      setState(() {
+        profPaths[i] = imgPath;
       });
     }
 
@@ -48,7 +50,6 @@ class _ProfDexState extends State<ProfDex> {
       sharedPreferences.setInt("profdex", 1);
       showAlertDialog(context);
     }
-
   }
 
   void showAlertDialog(BuildContext context) {
@@ -59,10 +60,10 @@ class _ProfDexState extends State<ProfDex> {
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                return Color(0xFF92140C); // Use the component's default.
-              },
-            )),
+          (Set<MaterialState> states) {
+            return Color(0xFF92140C); // Use the component's default.
+          },
+        )),
         child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Text("Sweet!",
@@ -129,18 +130,14 @@ class _ProfDexState extends State<ProfDex> {
         "%)";
   }
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<String> getImageDir(String name) async {
-    final path = await _localPath;
+  String getImageDir(String name) {
+    final path = widget.path;
     final imagePath = '$path/$name';
     if (Directory(imagePath).existsSync()) {
       return imagePath;
     } else {
-      return null;
+      Directory(imagePath).createSync();
+      return imagePath;
     }
   }
 
@@ -204,9 +201,13 @@ class _ProfDexState extends State<ProfDex> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => Award(
-                                              url: 'assets/' +
-                                                  index.toString() +
-                                                  '.png')));
+                                              url: profPaths[index] +
+                                                  '/' +
+                                                  rng
+                                                      .nextInt(profCollections[
+                                                          index])
+                                                      .toString() +
+                                                  '.jpg')));
                                 },
                                 child: ImageRotator(profPaths[index],
                                     profCollections[index], 3, 'jpg')),

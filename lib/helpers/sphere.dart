@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
@@ -89,7 +90,9 @@ class _SphereState extends State<Sphere> with TickerProviderStateMixin {
           final x0 = (lon + math.pi) * surfaceXRate;
           final y0 = (math.pi / 2 - lat) * surfaceYRate;
 
-          final color = surface[(y0.toInt() * surfaceWidth + x0).toInt()];
+          final a = (x0 < 3*surfaceWidth/16 ? 0 : (x0 > 13*surfaceWidth/16 ? surfaceWidth : (16*x0-3*surfaceWidth)/10));
+
+          final color = surface[(y0.toInt() * surfaceWidth + a).toInt()];
           sphere[(sphereY + x - minX).toInt()] = color;
         }
       }
@@ -151,8 +154,8 @@ class _SphereState extends State<Sphere> with TickerProviderStateMixin {
       },
       onScaleUpdate: (ScaleUpdateDetails details) {
         final offset = details.focalPoint - _lastFocalPoint;
-        rotationX = _lastRotationX + offset.dy / radius;
-        rotationZ = _lastRotationZ - offset.dx / radius;
+        rotationX = max(-math.pi / 4, min(_lastRotationX + offset.dy / radius, math.pi / 4));
+        rotationZ = max(-math.pi / 4, min(_lastRotationZ - offset.dx / radius, math.pi / 4));
         setState(() {});
       },
       onScaleEnd: (ScaleEndDetails details) {
@@ -161,7 +164,7 @@ class _SphereState extends State<Sphere> with TickerProviderStateMixin {
         final t = (v / a).abs() * 1000;
         final s = (v.sign * 0.5 * v * v / a) / radius;
         rotationZController.duration = Duration(milliseconds: t.toInt());
-        rotationZAnimation = Tween<double>(begin: rotationZ, end: rotationZ + s).animate(CurveTween(curve: Curves.decelerate).animate(rotationZController));
+        rotationZAnimation = Tween<double>(begin: rotationZ, end: max(-math.pi / 4, min(rotationZ + s, math.pi / 4))).animate(CurveTween(curve: Curves.decelerate).animate(rotationZController));
         rotationZController
           ..value = 0
           ..forward();
