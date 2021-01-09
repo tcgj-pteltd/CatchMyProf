@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:math' as math;
@@ -112,16 +113,14 @@ class _SphereState extends State<Sphere> with TickerProviderStateMixin {
   }
 
   void loadSurface() {
-    rootBundle.load(widget.surface).then((data) {
-      ui.decodeImageFromList(data.buffer.asUint8List(), (image) {
-        image.toByteData(format: ui.ImageByteFormat.rawRgba).then((pixels) {
-          surface = pixels.buffer.asUint32List();
-          surfaceWidth = image.width.toDouble();
-          surfaceHeight = image.height.toDouble();
-          setState(() {});
-        });
+    File(widget.surface).readAsBytes().then((bytes) => ui.decodeImageFromList(bytes, (image) {
+      image.toByteData(format: ui.ImageByteFormat.rawRgba).then((pixels) {
+        surface = pixels.buffer.asUint32List();
+        surfaceWidth = image.width.toDouble();
+        surfaceHeight = image.height.toDouble();
+        setState(() {});
       });
-    });
+    }));
   }
 
   @override

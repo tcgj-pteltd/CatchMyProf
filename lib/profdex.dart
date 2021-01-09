@@ -33,9 +33,8 @@ class _ProfDexState extends State<ProfDex> {
     profPaths = List(profNames.length);
     for (var i = 0; i < profNames.length; i++) {
       String escName = profNames[i].replaceAll(RegExp(' +'), '_');
-      String imgPath = getImageDir(escName);
       setState(() {
-        profPaths[i] = imgPath;
+        profPaths[i] = getImageDir(escName);
       });
     }
 
@@ -203,10 +202,7 @@ class _ProfDexState extends State<ProfDex> {
                                           builder: (context) => Award(
                                               url: profPaths[index] +
                                                   '/' +
-                                                  rng
-                                                      .nextInt(profCollections[
-                                                          index])
-                                                      .toString() +
+                                                  rng.nextInt(profCollections[index]).toString() +
                                                   '.jpg')));
                                 },
                                 child: ImageRotator(profPaths[index],
