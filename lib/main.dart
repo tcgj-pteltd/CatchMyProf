@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'cropper.dart';
 import 'homepage.dart';
-import 'homepage.dart';
 
 void main() {
   runApp(MyApp());

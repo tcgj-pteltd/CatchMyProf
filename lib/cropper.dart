@@ -153,6 +153,7 @@ class _CropperState extends State<Cropper> {
                   icon: Icon(
                     Icons.undo,
                     color: Colors.white,
+                    size: 30,
                   ),
                   tooltip: 'Undo',
                   onPressed: () {
@@ -168,6 +169,8 @@ class _CropperState extends State<Cropper> {
                   child: SliderTheme(
                     data: Theme.of(context).sliderTheme,
                     child: Slider(
+                      activeColor: Colors.white,
+                      inactiveColor: Colors.white10,
                       divisions: 360,
                       value: _rotation,
                       min: -180,
@@ -186,6 +189,7 @@ class _CropperState extends State<Cropper> {
                   icon: Icon(
                     Icons.aspect_ratio,
                     color: Colors.white,
+                    size: 30,
                   ),
                   itemBuilder: (context) => [
                     PopupMenuItem(
@@ -220,10 +224,12 @@ class _CropperState extends State<Cropper> {
                     setState(() {});
                   },
                 ),
+                Padding(padding: EdgeInsets.all(1)),
                 IconButton(
                   icon: Icon(
                     Icons.check,
                     color: Colors.white,
+                    size: 32,
                   ),
                   tooltip: 'Crop Shape',
                   onPressed: onCrop,

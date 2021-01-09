@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:path_provider/path_provider.dart';
+
 import 'cropper.dart';
 import 'helpers/names.dart';
 import 'logic/player.dart';
@@ -45,7 +47,6 @@ class _HomePageState extends State<HomePage> {
     Player.updateCollections();
   }
 
-
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
 
@@ -55,7 +56,8 @@ class _HomePageState extends State<HomePage> {
       await Navigator.pushNamed(
         context,
         Cropper.routeName,
-        arguments: CropArgs(_image, img.width.toDouble(), img.height.toDouble()),
+        arguments:
+            CropArgs(_image, img.width.toDouble(), img.height.toDouble()),
       );
       setState(() {
         _cropped = true;
@@ -76,7 +78,8 @@ class _HomePageState extends State<HomePage> {
       await Navigator.pushNamed(
         context,
         Cropper.routeName,
-        arguments: CropArgs(_image, img.width.toDouble(), img.height.toDouble()),
+        arguments:
+            CropArgs(_image, img.width.toDouble(), img.height.toDouble()),
       );
       setState(() {
         _cropped = true;
@@ -182,29 +185,56 @@ class _HomePageState extends State<HomePage> {
     return res;
   }
 
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> writeImage(String name, int index) async {
+    final path = await _localPath;
+    Directory('$path/$name').createSync();
+    String newImagePath = '$path/$name/$index.jpg';
+
+    return _image.copySync(newImagePath);
+  }
+
+  Future<String> getImageDir(String name) async {
+    final path = await _localPath;
+    final imagePath = '$path/$name';
+    if (Directory(imagePath).existsSync()) {
+      return imagePath;
+    } else {
+      return null;
+    }
+  }
+
   Future<void> addProf(String name) async {
     int counter = sharedPreferences.getInt(name) ?? 0;
+    String escName = name.replaceAll(RegExp(' +'), '_');
+    File out = await writeImage(escName, counter);
+    if (out == null) {
+      print("Error writing");
+    }
+
     sharedPreferences.setInt(name, counter + 1);
     print(counter);
   }
 
   void showFailDialog(BuildContext context, String input) {
     Widget okButton = ElevatedButton(
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                (Set<MaterialState> states) {
-              return Color(0xFF92140C); // Use the component's default.
-            },
-          )
-      ),
-      child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Text("Sure", style: TextStyle(color: Colors.white, fontSize: 20))
-      )
-    );
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            return Color(0xFF92140C); // Use the component's default.
+          },
+        )),
+        child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text("Sure",
+                style: TextStyle(color: Colors.white, fontSize: 20))));
 
     AlertDialog alert = AlertDialog(
       backgroundColor: Color(0xFF1E1E24),
@@ -232,13 +262,9 @@ class _HomePageState extends State<HomePage> {
                       thickness: 4,
                     )))
           ])),
-      content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(input, style: TextStyle(color: Colors.white,
-                fontSize: 20)),
-          ]
-      ),
+      content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        Text(input, style: TextStyle(color: Colors.white, fontSize: 20)),
+      ]),
       actions: [
         okButton,
       ],
@@ -256,22 +282,21 @@ class _HomePageState extends State<HomePage> {
     Widget okButton = ElevatedButton(
         onPressed: () {
           Navigator.of(context).pop();
-          addProf(faceIdToName(faceId));
-          Player.updateCollections();
-          removeImage();
+          addProf(faceIdToName(faceId)).then((_) {
+            Player.updateCollections();
+            removeImage();
+          });
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                return Color(0xFF92140C); // Use the component's default.
-              },
-            )
-        ),
+          (Set<MaterialState> states) {
+            return Color(0xFF92140C); // Use the component's default.
+          },
+        )),
         child: Padding(
             padding: EdgeInsets.all(10.0),
-            child: Text("Sweet!", style: TextStyle(color: Colors.white, fontSize: 20))
-        )
-    );
+            child: Text("Sweet!",
+                style: TextStyle(color: Colors.white, fontSize: 20))));
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       backgroundColor: Color(0xFF1E1E24),
@@ -299,22 +324,21 @@ class _HomePageState extends State<HomePage> {
                       thickness: 4,
                     )))
           ])),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text("Professor " + faceIdToName(faceId) + "!", style: TextStyle(color: Colors.white,
-          fontSize: 22, fontWeight: FontWeight.bold)),
-          SizedBox(height: 30),
-          Image(
-              image: AssetImage(
-                  'assets/' + faceIdToIndex(faceId) + '.png'),
-              width: 200,
-              height: 200),
-          SizedBox(height: 30),
-          Text("Head to your ProfDex to check it out.", style: TextStyle(color: Colors.white,
-          fontSize: 18)),
-        ]
-      ),
+      content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        Text("Professor " + faceIdToName(faceId) + "!",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold)),
+        SizedBox(height: 30),
+        Image(
+            image: AssetImage('assets/' + faceIdToIndex(faceId) + '.png'),
+            width: 200,
+            height: 200),
+        SizedBox(height: 30),
+        Text("Head to your ProfDex to check it out.",
+            style: TextStyle(color: Colors.white, fontSize: 18)),
+      ]),
       actions: [
         okButton,
       ],
@@ -329,16 +353,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   void submit() async {
     setState(() {
       isLoading = true;
     });
 
-    File compressedFile = await compressImage(_image);
+    _image = await compressImage(_image);
 
     print("Trying upload");
-    String cloudinaryUrl = await uploadImage(compressedFile);
+    String cloudinaryUrl = await uploadImage(_image);
 
     // https://res.cloudinary.com/jcjc/image/upload/v1610096814/rwvskc2b1pd6z23ssc9d.jpg - has face
     // https://res.cloudinary.com/jcjc/image/upload/v1610096965/zhmke8z8g7xe9nqapwae.jpg - no face
@@ -372,7 +395,6 @@ class _HomePageState extends State<HomePage> {
 
     if (faceSimilarity.data.length == 0 ||
         faceSimilarity.data[0]['confidence'] < 0.4) {
-
       showFailDialog(context, "This person does not exist in our database.");
 
       setState(() {
@@ -436,114 +458,123 @@ class _HomePageState extends State<HomePage> {
                           onPressed: getImageFromCamera,
                           elevation: 2.0,
                           fillColor: Color(0xFF92140C),
-                          child: Text("Snap!", textScaleFactor: 2.0, style: GoogleFonts.poiretOne(
-                            textStyle: TextStyle(color: Colors.white), fontSize: 30
-                          )),
+                          child: Text("Snap!",
+                              textScaleFactor: 2.0,
+                              style: GoogleFonts.poiretOne(
+                                  textStyle: TextStyle(color: Colors.white),
+                                  fontSize: 30)),
                           padding: EdgeInsets.all(80.0),
                           shape: CircleBorder(),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 20.0),
-                          child: TextButton(
-                              onPressed: getImageFromGallery,
-                              child: new RichText(
-                                  text: new TextSpan(
-                                    children: <TextSpan>[
-                                      new TextSpan(text: 'Or ', style: new TextStyle(fontSize: 18)),
-                                      new TextSpan(text: 'Gallery', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
-                                    ],
-                                  )
-                              )
-                          )
-                        ),
+                            margin: EdgeInsets.only(top: 20.0),
+                            child: TextButton(
+                                onPressed: getImageFromGallery,
+                                child: new RichText(
+                                    text: new TextSpan(
+                                  children: <TextSpan>[
+                                    new TextSpan(
+                                        text: 'Or ',
+                                        style: new TextStyle(fontSize: 18)),
+                                    new TextSpan(
+                                        text: 'Gallery',
+                                        style: new TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18))
+                                  ],
+                                )))),
                       ],
                     ))
                 : isLoading
-                ? Column(
-                    children: <Widget>[
-                      Text("Who's that professor?", style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 50),
-                      SpinKitSquareCircle(
-                      color: Colors.white,
-                      size: 100.0
-                      )
-                    ]
-                )
-                : Column(
-                    children: <Widget>[
-                      (_cropped
-                          ? Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 2,
-                                  color: Colors.white,),
-                              ),
-                              child: ClipOval(
-                                child: Image.memory(_image.readAsBytesSync(), fit: BoxFit.contain, width: 300, height: 300, gaplessPlayback: true)
-                              ),
-                            )
-                          : Image.file(_image, width: 300, height: 300)
-                      ),
-                      SizedBox(height: 50),
-                      ElevatedButton(
-                        onPressed: submit,
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                return Color(0xFF92140C); // Use the component's default.
-                              },
-                            )
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Text("Identify", textScaleFactor: 2.0, style: GoogleFonts.poiretOne(
-                              textStyle: TextStyle(color: Colors.white), fontSize: 22
-                          ))
-                        )
-                      ),
-                      SizedBox(height: 20),
-                      TextButton(
-                          onPressed: removeImage,
-                          child: new RichText(
-                              text: new TextSpan(
+                    ? Column(children: <Widget>[
+                        Text("Who's that professor?",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(height: 50),
+                        SpinKitSquareCircle(color: Colors.white, size: 100.0)
+                      ])
+                    : Column(
+                        children: <Widget>[
+                          (_cropped
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      width: 2,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  child: ClipOval(
+                                      child: Image.memory(
+                                          _image.readAsBytesSync(),
+                                          fit: BoxFit.contain,
+                                          width: 300,
+                                          height: 300,
+                                          gaplessPlayback: true)),
+                                )
+                              : Image.file(_image, width: 300, height: 300)),
+                          SizedBox(height: 50),
+                          ElevatedButton(
+                              onPressed: submit,
+                              style: ButtonStyle(backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  return Color(
+                                      0xFF92140C); // Use the component's default.
+                                },
+                              )),
+                              child: Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Text("Identify",
+                                      textScaleFactor: 2.0,
+                                      style: GoogleFonts.poiretOne(
+                                          textStyle:
+                                              TextStyle(color: Colors.white),
+                                          fontSize: 22)))),
+                          SizedBox(height: 20),
+                          TextButton(
+                              onPressed: removeImage,
+                              child: new RichText(
+                                  text: new TextSpan(
                                 children: <TextSpan>[
-                                  new TextSpan(text: 'Or ', style: new TextStyle(fontSize: 18)),
-                                  new TextSpan(text: 'Cancel', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 18))
+                                  new TextSpan(
+                                      text: 'Or ',
+                                      style: new TextStyle(fontSize: 18)),
+                                  new TextSpan(
+                                      text: 'Cancel',
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18))
                                 ],
-                              )
-                          )
+                              ))),
+                        ],
                       ),
-                    ],
-                  ),
           ),
         ],
       ),
-      floatingActionButton: isLoading ? null : Container(
-        height: 90.0,
-        width: 90.0,
-        child: FloatingActionButton(
-            backgroundColor: Color(0xFF92140C),
-            onPressed: () {
-              Player.updateCollections();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfDex())
-              );
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                    Icons.portrait_rounded,
-                    size: 36.0
-                ),
-                Text("ProfDex", style: TextStyle(fontSize: 9))
-              ]
+      floatingActionButton: isLoading
+          ? null
+          : Container(
+              height: 90.0,
+              width: 90.0,
+              child: FloatingActionButton(
+                backgroundColor: Color(0xFF92140C),
+                onPressed: () {
+                  Player.updateCollections();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfDex()));
+                },
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.portrait_rounded, size: 36.0),
+                      Text("ProfDex", style: TextStyle(fontSize: 9))
+                    ]),
+              ),
             ),
-        ),
-      ),
     );
   }
 }

@@ -3,7 +3,7 @@ import '../helpers/names.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Player {
-  static List<int> collections = new List(9);
+  static List<int> collections = new List(10);
 
   static List<int> getCollections() {
     return collections;
@@ -12,7 +12,7 @@ class Player {
   static void updateCollections() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 10; i++) {
       String profName = PROF_NAMES[i];
       if (sharedPreferences.getInt(profName) == null) {
         sharedPreferences.setInt(profName, 0);

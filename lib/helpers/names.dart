@@ -26,6 +26,8 @@ const String BIMLESH_2    = "60123a64-2f1d-4942-9ca4-19b2afb1ab51";
 const String ADI_YOGA_1   = "5d2c6bd4-2024-4ade-8845-07905276f864";
 const String ADI_YOGA_2   = "300bdb0d-8158-417e-9225-43a9d648795b";
 
+const String ROBY_1       = "ea37fa4a-0fb5-4157-8a67-10496a4d0c13";
+
 const String MARTIN_NAME = 'Martin Henz';
 const String CRISTINA_NAME = 'Cristina Carbunaru';
 const String WEI_TSANG_NAME = 'Ooi Wei Tsang';
@@ -35,10 +37,11 @@ const String TERENCE_NAME = 'Terence Sim';
 const String DAMITH_NAME = 'Damith Rajapakse';
 const String BIMLESH_NAME = 'Bimlesh Wadhwa';
 const String ADI_NAME = 'Adi Yoga';
+const String ROBY_NAME = 'Roby Tanama';
 
 const List<String> PROF_NAMES = [ MARTIN_NAME, CRISTINA_NAME, WEI_TSANG_NAME,
   STEVEN_NAME, AARON_NAME, TERENCE_NAME,
-  DAMITH_NAME, BIMLESH_NAME, ADI_NAME ];
+  DAMITH_NAME, BIMLESH_NAME, ADI_NAME, ROBY_NAME ];
 
 String faceIdToName(String faceId) {
   switch (faceId) {
@@ -101,6 +104,12 @@ String faceIdToName(String faceId) {
     case ADI_YOGA_2:
       {
         return ADI_NAME;
+      }
+      break;
+
+    case ROBY_1:
+      {
+        return ROBY_NAME;
       }
       break;
 
@@ -175,6 +184,11 @@ String faceIdToIndex(String faceId) {
         return '8';
       }
       break;
+
+    case ROBY_1:
+      {
+        return '9';
+      }
 
     default:
       {
